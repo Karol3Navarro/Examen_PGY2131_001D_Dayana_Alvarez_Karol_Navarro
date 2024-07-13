@@ -55,7 +55,7 @@ ROOT_URLCONF = 'TiendaMascotas.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -99,7 +99,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+LOGIN_REDIRECT_URL="index"
+LOGOUT_REDIRECT_URL="index"
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/

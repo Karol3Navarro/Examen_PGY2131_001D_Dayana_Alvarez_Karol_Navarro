@@ -5,7 +5,6 @@ urlpatterns = [
     path('index', views.index, name='index'),
     path('nuevos_prod',views.nuevos_prod, name='nuevos_prod'),
     path('adopta',views.adopta, name='adopta'),
-    path('registro',views.registro, name='registro'),
     path('nosotros',views.nosotros, name='nosotros'),
     path('contacto',views.contacto, name='contacto'),
     path('socio',views.socio, name='socio'),
@@ -28,7 +27,7 @@ urlpatterns = [
     path('decrementar/<int:producto_id>/', views.decrementar_cantidad, name='decrementar_cantidad'),
     
 
-    
+    path('registro', views.registro, name='registro'),
 
     
 

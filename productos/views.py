@@ -3,12 +3,38 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from .models import Producto, Categoria, ItemCarrito
 from .carrito import Carrito
-from .forms import CategoriaForm
+from .forms import CategoriaForm, CustomUserCreationForm #Nuevo
+from django.contrib.auth.decorators import login_required #Nuevo
+from django.contrib.auth import authenticate, login #Nuevo
+from django.contrib import messages #Nuevo
+
+#@login_required
+def index(request):
+    request.session["usuario"]=" "
+    usuario=request.session["usuario"]
+    context={'usuario':usuario}
+    return render (request, 'productos/index.html', context)
 
 # Create your views here.
-def index(request):
-    context={}
-    return render (request, 'productos/index.html', context)
+def registro(request):
+    data = {
+        'form': CustomUserCreationForm()
+    }
+    if request.method == 'POST':
+        formulario = CustomUserCreationForm(data =request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            user = authenticate(username= formulario.cleaned_data["username"], password= formulario.cleaned_data["password1"])
+            login(request, user)
+            messages.success(request, "Te has registrado correctament")
+            return redirect(to="index")
+        data["form"] = formulario
+    return render(request, 'registration/registro.html', data)
+
+# Create your views here.
+# def index(request):
+#     context={}
+#     return render (request, 'productos/index.html', context)
 
 def nuevos_prod(request):
     producto = Producto.objects.all()
@@ -17,9 +43,7 @@ def nuevos_prod(request):
 def adopta(request):
     context={}
     return render (request, 'productos/adopta.html', context)
-def registro(request):
-    context={}
-    return render (request, 'productos/registro.html', context)
+
 def nosotros(request):
     context={}
     return render (request, 'productos/nosotros.html', context)
