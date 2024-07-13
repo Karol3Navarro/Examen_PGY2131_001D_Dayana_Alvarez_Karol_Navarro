@@ -39,7 +39,7 @@
                                 {%if user.is_authenticated %}
                                     @{{user.username}}
                                     <br>
-                                    <button class="btn btn-danger" type="submit">Cerrar Sesion</button>
+                                    <button class="btn btn-danger" type="submit">Cerrar Sesión</button>
                                 {% else %}
                                     <a class="btn btn-primary btn-secondary" href="{% url 'login' %}">Iniciar Sesion</a>
                                     <a class="btn btn-primary btn-secondary" href="{% url 'registro' %}">Registro</a>

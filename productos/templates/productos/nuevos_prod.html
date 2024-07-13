@@ -21,28 +21,31 @@
                     </button>
                     <!-- Formulario -->
                     <div class="dropdown-menu" style="background-color:  #7888AF;color: white;" aria-labelledby="dropdownForm">
-                        <form class="form">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Nombre de usuario</label>
-                                <input type="text" class="form-control" id="username" placeholder="Ingresa tu nombre de usuario">
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" id="password" placeholder="Ingresa tu contraseña">
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-secondary" onclick="login()">Iniciar sesión</button><br>
-                            <a href="{% url 'registro' %}"type="submit" class="btn btn-primary btn-secondary">Registrar</a>
+                        <form class="form" method="post" action="{% url 'logout' %}">
+                              <a style="color: white;" class="nav-link" href="#" role="button" aria-expanded="false">
+                                  {%if user.is_authenticated %}
+                                      @{{user.username}}
+                                      <br>
+                                      <button class="btn btn-danger" type="submit">Cerrar Sesión</button>
+                                  {% else %}
+                                      <a class="btn btn-primary btn-secondary" href="{% url 'login' %}">Iniciar Sesion</a>
+                                      <a class="btn btn-primary btn-secondary" href="{% url 'registro' %}">Registro</a>
+                                  {% endif %}
+                              </a>
+                              {% csrf_token %}
+                              
                         </form>
                     </div>
                 </div>
             </div>
+            
         </div>
         <!--Logo-->
         <center>
             <a href="{% url 'index' %}"><img src="{% static 'img/refugio-de-animales.png' %}" alt="Bootstrap" height="80" width="80"></a>
         </center> 
         
-
+  
         <!--Menu-->
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid" style="background-color: #7888AF;">
@@ -97,15 +100,15 @@
     </div>
     <button id="btnOrdenarAlfabeticamente" class="btn btn-primary me-md-2" onclick="ordenarAlfabeticamente()">Ordenar alfabéticamente</button> 
     <button id="btnOrdenar" class="btn btn-primary me-md-2" onclick="ordenarPorPrecio()">Ordenar por precio</button>
-
-    
-    <button class="btn btn-primary me-md-2" type="button">
-        <a style="color: white; text-decoration: none;" href="{% url 'productosAdd' %}">Agregar</a>
-    </button>
-    <button class="btn btn-primary me-md-2" type="button">
-        <a style="color: white; text-decoration: none;" href="{% url 'nuevos_prod' %}">Volver</a>
-    </button>
-    
+    <!-- Solo cuando esta conectado y es admin -->
+    {% if user.is_authenticated and user.is_superuser %}
+        <button class="btn btn-primary me-md-2" type="button">
+            <a style="color: white; text-decoration: none;" href="{% url 'productosAdd' %}">Agregar</a>
+        </button>
+        <button class="btn btn-primary me-md-2" type="button">
+            <a style="color: white; text-decoration: none;" href="{% url 'nuevos_prod' %}">Volver</a>
+        </button>
+    {% endif%}
     <div id="idMensaje">
         {% if mensaje %}
             {{ mensaje }}
@@ -128,8 +131,10 @@
                             
                             <!-- Botones -->
                             <div class="d-grid gap-3 d-md-block">
-                                <a href="{% url 'productos_findEdit' pk=x.id_producto %}" class="btn btn-danger btn-sm">Modificar</a>
-                                <a href="{% url 'productos_del' pk=x.id_producto %}" class="btn btn-danger btn-sm">Eliminar</a>
+                                {% if user.is_authenticated and user.is_superuser %}
+                                    <a href="{% url 'productos_findEdit' pk=x.id_producto %}" class="btn btn-danger btn-sm">Modificar</a>
+                                    <a href="{% url 'productos_del' pk=x.id_producto %}" class="btn btn-danger btn-sm">Eliminar</a>
+                                {% endif %}
                                 <form action="{% url 'agregar_al_carrito' x.id_producto %}" method="post">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-primary btn-sm">Agregar al Carrito</button>
