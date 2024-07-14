@@ -22,28 +22,31 @@
                     </button>
                     <!-- Formulario -->
                     <div class="dropdown-menu" style="background-color:  #7888AF;color: white;" aria-labelledby="dropdownForm">
-                        <form class="form">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Nombre de usuario</label>
-                                <input type="text" class="form-control" id="username" placeholder="Ingresa tu nombre de usuario">
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" id="password" placeholder="Ingresa tu contraseña">
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-secondary" onclick="login()">Iniciar sesión</button><br>
-                            <a href="{% url 'registro' %}"type="submit" class="btn btn-primary btn-secondary">Registrar</a>
+                        <form class="form" method="post" action="{% url 'logout' %}">
+                              <a style="color: white;" class="nav-link" href="#" role="button" aria-expanded="false">
+                                  {%if user.is_authenticated %}
+                                      @{{user.username}}
+                                      <br>
+                                      <button class="btn btn-danger" type="submit">Cerrar Sesión</button>
+                                  {% else %}
+                                      <a class="btn btn-primary btn-secondary" href="{% url 'login' %}">Iniciar Sesion</a>
+                                      <a class="btn btn-primary btn-secondary" href="{% url 'registro' %}">Registro</a>
+                                  {% endif %}
+                              </a>
+                              {% csrf_token %}
+                              
                         </form>
                     </div>
                 </div>
             </div>
+            
         </div>
         <!--Logo-->
         <center>
             <a href="{% url 'index' %}"><img src="{% static 'img/refugio-de-animales.png' %}" alt="Bootstrap" height="80" width="80"></a>
         </center> 
         
-
+  
         <!--Menu-->
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid" style="background-color: #7888AF;">
@@ -86,7 +89,6 @@
         <!--Carrito de compras barra desplegable-->
         
     </header>
-
     <main>
         <!--Porque ser socio-->
         <h1 style="font-family: 'Georgia', serif; text-align: center; color: #7888AF;">¿Por qué hacerte socio?</h1>
